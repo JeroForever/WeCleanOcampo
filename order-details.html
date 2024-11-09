@@ -72,7 +72,12 @@
             margin-bottom: 50px;
         }
 
+        /* Print styles */
         @media print {
+            #print-button {
+                display: none; /* Hide print button during print */
+            }
+
             body {
                 height: auto;
                 width: 58mm;
@@ -105,6 +110,9 @@
     </style>
 </head>
 <body>
+    <!-- Print Button -->
+    <button id="print-button" onclick="printReceipt()">Print Receipt</button>
+
     <div class="receipt">
         <div class="header">
             <h1 id="shopname">Shop Name</h1>
@@ -210,15 +218,12 @@
             document.getElementById('totalamount2').textContent = params.totalamount;
             document.getElementById('paymentstatus2').textContent = params.paymentstatus;
             document.getElementById('cardnumber-box2').textContent = params.cardnumber;
-
-            // Trigger the print dialog
-            window.print();
-
-            // Close the window after the print dialog is opened
-            window.onafterprint = function() {
-                window.close();
-            };
         });
+
+        // Function to trigger print dialog
+        function printReceipt() {
+            window.print();
+        }
     </script>
 </body>
 </html>
