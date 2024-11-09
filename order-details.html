@@ -5,14 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Receipt</title>
     <style>
+        :root {
+            --paper-width: 80mm; /* Default to 80mm */
+        }
+
         body {
             font-family: Arial, sans-serif;
-            height: 150mm; /* Enforce fixed height for printout */
+            width: var(--paper-width); /* Set variable width */
+            height: 150mm; /* Set height for printout */
             margin: 0;
             padding: 0px;
             font-size: 14px;
             color: black;
             overflow: hidden;
+        }
+
+        .paper-50mm {
+            --paper-width: 50mm; /* Adjust width to 50mm */
+            font-size: 12px; /* Reduce font size for 50mm */
         }
 
         .header, .footer {
@@ -43,6 +53,8 @@
         .card-box {
             display: block;
             margin: 20px auto;
+            width: calc(var(--paper-width) - 20mm); /* Adjust for paper size */
+            height: 50mm;
             border: 1px solid black;
             text-align: center;
             display: flex;
@@ -71,6 +83,7 @@
         @media print {
             body {
                 height: auto;
+                width: var(--paper-width);
                 margin: 0;
                 padding: 0px;
             }
@@ -80,9 +93,9 @@
             }
 
             .header, .content, .footer {
-                width: 100%;
-                text-align: center;
-                padding: 0;
+                width: 100%; 
+                text-align: center; 
+                padding: 0; 
                 margin: 0;
             }
 
@@ -98,126 +111,18 @@
         }
     </style>
 </head>
-<body>
-    <div class="receipt">
-        <div class="header">
-            <h1 id="shopname">Shop Name</h1>
-            <p id="shopaddress">Shop Address</p>
-            <p id="shopcontactnumber">Shop Contact Number</p>
-            <p>&nbsp;</p>
-        </div>
+<body class="paper-80mm"> <!-- Default is 80mm -->
 
-        <div class="content">
-            <p>Customer Name: <span id="customername"></span></p>
-            <p>Transaction Number: <span id="orderid"></span></p>
-            <p>Date of transaction: <span id="transactiondate"></span></p>
-            <p>Total Amount Ordered: <span id="orderedqty"></span></p>
-            <p>Total Amount: <span id="totalamount"></span></p>
-            <p>Payment Status: <span id="paymentstatus"></span></p>
-            <p>&nbsp;</p>
-        </div>
+<!-- Your receipt HTML content -->
 
-        <div class="card-box" id="cardnumber-box">
-            <!-- Card Number will appear here -->
-        </div>
-        <div class="card-label">Card Number</div>
+<script>
+    // Function to switch paper size
+    function setPaperSize(size) {
+        document.body.className = size === 50 ? 'paper-50mm' : 'paper-80mm';
+    }
 
-        <div class="footer">
-            <p>This system is powered by</p>
-            <p class="bold">Momsbest Mobile App</p>
-            <p>Your Ultimate Laundry App</p>
-        </div>
-    </div>
-
-    <!-- Duplicate the same receipt -->
-    <div class="receipt">
-        <div class="header">
-            <h1 id="shopname2">Shop Name</h1>
-            <p id="shopaddress2">Shop Address</p>
-            <p id="shopcontactnumber2">Shop Contact Number</p>
-            <p>&nbsp;</p>
-        </div>
-
-        <div class="content">
-            <p>Customer Name: <span id="customername2"></span></p>
-            <p>Transaction Number: <span id="orderid2"></span></p>
-            <p>Date of transaction: <span id="transactiondate2"></span></p>
-            <p>Total Amount Ordered: <span id="orderedqty2"></span></p>
-            <p>Total Amount: <span id="totalamount2"></span></p>
-            <p>Payment Status: <span id="paymentstatus2"></span></p>
-            <p>&nbsp;</p>
-        </div>
-
-        <div class="card-box" id="cardnumber-box2">
-            <!-- Card Number will appear here -->
-        </div>
-        <div class="card-label">Card Number</div>
-
-        <div class="footer">
-            <p>This system is powered by</p>
-            <p class="bold">Momsbest Mobile App</p>
-            <p>Your Ultimate Laundry App</p>
-        </div>
-    </div>
-
-    <script>
-        // Function to get URL parameters
-        function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            return {
-                shopname: params.get('shopname'),
-                shopaddress: params.get('shopaddress'),
-                shopcontactnumber: params.get('shopcontactnumber'),
-                customername: params.get('customername'),
-                orderid: params.get('orderid'),
-                transactiondate: params.get('transactiondate'),
-                orderedqty: params.get('orderedqty'),
-                totalamount: params.get('totalamount'),
-                paymentstatus: params.get('paymentstatus'),
-                cardnumber: params.get('cardnumber'),
-                paperSize: params.get('paperSize')
-            };
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const params = getQueryParams();
-
-            // Set paper width based on paperSize parameter
-            const paperWidth = params.paperSize === '50mm' ? '50mm' : '80mm';
-            document.body.style.width = paperWidth;
-
-            // Populate first receipt
-            document.getElementById('shopname').textContent = params.shopname;
-            document.getElementById('shopaddress').textContent = params.shopaddress;
-            document.getElementById('shopcontactnumber').textContent = params.shopcontactnumber;
-            document.getElementById('customername').textContent = params.customername;
-            document.getElementById('orderid').textContent = params.orderid;
-            document.getElementById('transactiondate').textContent = params.transactiondate;
-            document.getElementById('orderedqty').textContent = params.orderedqty;
-            document.getElementById('totalamount').textContent = params.totalamount;
-            document.getElementById('paymentstatus').textContent = params.paymentstatus;
-            document.getElementById('cardnumber-box').textContent = params.cardnumber;
-
-            // Populate second receipt
-            document.getElementById('shopname2').textContent = params.shopname;
-            document.getElementById('shopaddress2').textContent = params.shopaddress;
-            document.getElementById('shopcontactnumber2').textContent = params.shopcontactnumber;
-            document.getElementById('customername2').textContent = params.customername;
-            document.getElementById('orderid2').textContent = params.orderid;
-            document.getElementById('transactiondate2').textContent = params.transactiondate;
-            document.getElementById('orderedqty2').textContent = params.orderedqty;
-            document.getElementById('totalamount2').textContent = params.totalamount;
-            document.getElementById('paymentstatus2').textContent = params.paymentstatus;
-            document.getElementById('cardnumber-box2').textContent = params.cardnumber;
-
-            // Trigger the print dialog
-            window.print();
-
-            // Close the window after the print dialog is opened
-            window.onafterprint = function() {
-                window.close();
-            };
-        });
-    </script>
+    // Example: Change paper size based on a condition or parameter
+    setPaperSize(50); // Use 50mm paper; change to setPaperSize(80) for 80mm
+</script>
 </body>
 </html>
